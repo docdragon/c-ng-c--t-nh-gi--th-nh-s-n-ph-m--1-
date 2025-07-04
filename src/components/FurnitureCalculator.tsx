@@ -86,7 +86,7 @@ const FurnitureCalculator: React.FC<FurnitureCalculatorProps> = ({ materials }) 
   
   const handleAiSuggest = useCallback(async (prompt: string) => {
       setIsAiLoading(true);
-      const suggestions = await getFurnitureSuggestions(prompt);
+      const suggestions = await getFurnitureSuggestions(prompt, materials);
       if (suggestions) {
           setParams(prev => ({
               ...prev,
@@ -105,7 +105,6 @@ const FurnitureCalculator: React.FC<FurnitureCalculatorProps> = ({ materials }) 
           }));
       }
       setIsAiLoading(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [materials]);
 
   const costBreakdown: CostBreakdown = useMemo(() => {
