@@ -1,0 +1,5 @@
+{
+  "name": "Công Cụ Tính Giá Thành Sản Phẩm",
+  "description": "Một ứng dụng web để ước tính chi phí cho sản phẩm nội thất và bảng hiệu quảng cáo, được hỗ trợ bởi AI để đưa ra các đề xuất thông minh.",
+  "requestFramePermissions": []
+}
