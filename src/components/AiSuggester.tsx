@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SparklesIcon, ArrowRightIcon } from './Icons';
 
 interface AiSuggesterProps {
@@ -10,12 +10,12 @@ interface AiSuggesterProps {
 const AiSuggester: React.FC<AiSuggesterProps> = ({ onSuggest, isLoading, placeholder }) => {
   const [prompt, setPrompt] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (prompt.trim() && !isLoading) {
       onSuggest(prompt);
     }
-  };
+  }, [prompt, isLoading, onSuggest]);
 
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-5 rounded-xl border border-indigo-200 shadow-sm">
