@@ -1,3 +1,24 @@
+export interface MaterialItem {
+  name: string;
+  price: number;
+}
+
+export interface FurnitureMaterials {
+  materials: MaterialItem[];
+  finishes: MaterialItem[];
+  hardware: MaterialItem[];
+}
+
+export interface SignageMaterials {
+  frames: MaterialItem[];
+  faces: MaterialItem[];
+}
+
+export interface AllMaterials {
+  furniture: FurnitureMaterials;
+  signage: SignageMaterials;
+}
+
 export interface CostItem {
   name: string;
   value: number;

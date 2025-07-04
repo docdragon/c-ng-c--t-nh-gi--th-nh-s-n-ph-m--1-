@@ -1,28 +1,44 @@
-import React, { useState, useMemo } from 'react';
-import type { SignageParams, CostBreakdown, CostItem } from '../types';
+import React, { useState, useMemo, useEffect } from 'react';
+import type { SignageParams, CostBreakdown, CostItem, SignageMaterials } from '../types';
 import CostResult from './CostResult';
 import { LightbulbIcon } from './Icons';
 
 const SIGN_TYPES = ['Hộp đèn', 'Chữ nổi', 'Bảng Alu', 'Bảng LED'];
-const FRAME_MATERIALS = { 'Sắt': 50000, 'Nhôm': 80000, 'Inox': 120000 };
-const FACE_MATERIALS = { 'Mica': 400000, 'Alu': 350000, 'Bạt Hiflex': 80000 };
 
-const SignageCalculator: React.FC = () => {
+interface SignageCalculatorProps {
+    materials: SignageMaterials;
+}
+
+const SignageCalculator: React.FC<SignageCalculatorProps> = ({ materials }) => {
+    const getPrice = (type: keyof SignageMaterials, name: string) => {
+      return materials[type]?.find(item => item.name === name)?.price || 0;
+    }
+
     const [params, setParams] = useState<SignageParams>({
         name: 'Bảng hiệu công ty',
         width: 3,
         height: 1.2,
         signType: 'Hộp đèn',
-        frameMaterial: 'Nhôm',
-        framePrice: FRAME_MATERIALS['Nhôm'],
-        faceMaterial: 'Mica',
-        facePrice: FACE_MATERIALS['Mica'],
+        frameMaterial: materials.frames[0]?.name || '',
+        framePrice: materials.frames[0]?.price || 0,
+        faceMaterial: materials.faces[0]?.name || '',
+        facePrice: materials.faces[0]?.price || 0,
         lighting: true,
         lightingCost: 500000,
         laborHours: 12,
         laborRate: 60000,
         profitMargin: 30,
     });
+    
+    useEffect(() => {
+        setParams(prev => ({
+            ...prev,
+            framePrice: getPrice('frames', prev.frameMaterial),
+            facePrice: getPrice('faces', prev.faceMaterial)
+        }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [materials]);
+
 
     const handleParamChange = (field: keyof SignageParams, value: any) => {
         setParams(prev => ({ ...prev, [field]: value }));
@@ -83,10 +99,10 @@ const SignageCalculator: React.FC = () => {
                 <div>
                     <h3 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Vật liệu</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <SelectField label="Vật liệu khung" value={params.frameMaterial} onChange={e => handleParamChange('frameMaterial', e.target.value)} options={Object.keys(FRAME_MATERIALS)} />
-                        <InputField label="Đơn giá khung (/m)" type="number" value={params.framePrice} onChange={e => handleParamChange('framePrice', e.target.value)} />
-                        <SelectField label="Vật liệu mặt" value={params.faceMaterial} onChange={e => handleParamChange('faceMaterial', e.target.value)} options={Object.keys(FACE_MATERIALS)} />
-                        <InputField label="Đơn giá mặt (/m²)" type="number" value={params.facePrice} onChange={e => handleParamChange('facePrice', e.target.value)} />
+                        <SelectField label="Vật liệu khung" value={params.frameMaterial} onChange={e => { const val = e.target.value; handleParamChange('frameMaterial', val); handleParamChange('framePrice', getPrice('frames', val)); }} options={materials.frames.map(m => m.name)} />
+                        <InputField label="Đơn giá khung (/m)" type="number" value={params.framePrice} onChange={e => handleParamChange('framePrice', Number(e.target.value))} />
+                        <SelectField label="Vật liệu mặt" value={params.faceMaterial} onChange={e => { const val = e.target.value; handleParamChange('faceMaterial', val); handleParamChange('facePrice', getPrice('faces', val)); }} options={materials.faces.map(m => m.name)} />
+                        <InputField label="Đơn giá mặt (/m²)" type="number" value={params.facePrice} onChange={e => handleParamChange('facePrice', Number(e.target.value))} />
                     </div>
                 </div>
                 
@@ -97,10 +113,10 @@ const SignageCalculator: React.FC = () => {
                       <input type="checkbox" id="lighting" checked={params.lighting} onChange={e => handleParamChange('lighting', e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                       <label htmlFor="lighting" className="font-medium text-slate-700">Có đèn chiếu sáng</label>
                     </div>
-                     <InputField label="Chi phí đèn (tổng)" type="number" value={params.lightingCost} onChange={e => handleParamChange('lightingCost', e.target.value)} disabled={!params.lighting} />
-                    <InputField label="Giờ công (h)" type="number" value={params.laborHours} onChange={e => handleParamChange('laborHours', e.target.value)} />
-                    <InputField label="Đơn giá công (/h)" type="number" value={params.laborRate} onChange={e => handleParamChange('laborRate', e.target.value)} />
-                    <InputField label="Lợi nhuận (%)" type="number" value={params.profitMargin} onChange={e => handleParamChange('profitMargin', e.target.value)} />
+                     <InputField label="Chi phí đèn (tổng)" type="number" value={params.lightingCost} onChange={e => handleParamChange('lightingCost', Number(e.target.value))} disabled={!params.lighting} />
+                    <InputField label="Giờ công (h)" type="number" value={params.laborHours} onChange={e => handleParamChange('laborHours', Number(e.target.value))} />
+                    <InputField label="Đơn giá công (/h)" type="number" value={params.laborRate} onChange={e => handleParamChange('laborRate', Number(e.target.value))} />
+                    <InputField label="Lợi nhuận (%)" type="number" value={params.profitMargin} onChange={e => handleParamChange('profitMargin', Number(e.target.value))} />
                   </div>
                 </div>
             </div>
