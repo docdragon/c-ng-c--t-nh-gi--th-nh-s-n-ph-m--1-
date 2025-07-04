@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FurnitureCalculator from './components/FurnitureCalculator';
 import SignageCalculator from './components/SignageCalculator';
 import { LightbulbIcon, CubeIcon, SettingsIcon } from './components/Icons';
-import useMaterials from './hooks/useMaterials';
+import useMaterials from './hooks/useMaterials.ts';
 import Modal from './components/Modal';
 import MaterialsManager from './components/MaterialsManager';
 
