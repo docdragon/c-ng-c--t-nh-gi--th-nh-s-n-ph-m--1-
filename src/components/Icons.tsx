@@ -1,5 +1,3 @@
-import React from 'react';
-
 const iconProps = {
   width: "20",
   height: "20",

@@ -61,7 +61,7 @@ export const getFurnitureSuggestions = async (prompt: string): Promise<AiFurnitu
             }
         });
 
-        const text = response.text;
+        const text = response.text || '';
         return parseJsonResponse<AiFurnitureSuggestion>(text);
 
     } catch (error) {
