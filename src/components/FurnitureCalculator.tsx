@@ -164,9 +164,9 @@ const FurnitureCalculator: React.FC = () => {
         <div>
           <h3 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Vật liệu & Hoàn thiện</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <SelectField label="Vật liệu ván" value={params.material} onChange={e => { const val = e.target.value; handleParamChange('material', val); handleParamChange('materialPrice', MATERIALS[val as keyof typeof MATERIALS]); }} options={Object.keys(MATERIALS)} />
+              <SelectField label="Vật liệu ván" value={params.material} onChange={e => { const val = e.target.value; handleParamChange('material', val); handleParamChange('materialPrice', MATERIALS[val as keyof typeof MATERIALS] || 0); }} options={Object.keys(MATERIALS)} />
               <InputField label="Đơn giá ván (/m²)" type="number" value={params.materialPrice} onChange={e => handleParamChange('materialPrice', Number(e.target.value))} />
-              <SelectField label="Bề mặt hoàn thiện" value={params.finish} onChange={e => { const val = e.target.value; handleParamChange('finish', val); handleParamChange('finishPrice', FINISHES[val as keyof typeof FINISHES]); }} options={Object.keys(FINISHES)} />
+              <SelectField label="Bề mặt hoàn thiện" value={params.finish} onChange={e => { const val = e.target.value; handleParamChange('finish', val); handleParamChange('finishPrice', FINISHES[val as keyof typeof FINISHES] || 0); }} options={Object.keys(FINISHES)} />
               <InputField label="Đơn giá hoàn thiện (/m²)" type="number" value={params.finishPrice} onChange={e => handleParamChange('finishPrice', Number(e.target.value))} />
           </div>
         </div>

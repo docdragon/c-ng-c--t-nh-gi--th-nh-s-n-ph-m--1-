@@ -1,11 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
 import { AiFurnitureSuggestion } from '../types';
 
-if (!process.env.API_KEY) {
-    console.warn("API_KEY môi trường biến chưa được thiết lập. Các tính năng AI sẽ không hoạt động.");
+const apiKey = import.meta.env.VITE_API_KEY;
+
+if (!apiKey) {
+    console.warn("Biến môi trường VITE_API_KEY chưa được thiết lập. Các tính năng AI sẽ không hoạt động.");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || " " });
+const ai = new GoogleGenAI({ apiKey: apiKey || "" });
 
 const parseJsonResponse = <T,>(text: string): T | null => {
     let jsonStr = text.trim();
@@ -24,8 +26,8 @@ const parseJsonResponse = <T,>(text: string): T | null => {
 };
 
 export const getFurnitureSuggestions = async (prompt: string): Promise<AiFurnitureSuggestion | null> => {
-    if (!process.env.API_KEY) {
-        alert("Vui lòng thiết lập API_KEY để sử dụng tính năng AI.");
+    if (!apiKey) {
+        alert("Vui lòng thiết lập biến môi trường VITE_API_KEY trong cài đặt dự án trên Vercel để sử dụng tính năng AI.");
         return null;
     }
 
